@@ -18,14 +18,26 @@ protected:
 };
 
 TEST_P(GaussTest, Erf) {
-	EXPECT_EQ(gauss_->erf(3),30);
-	EXPECT_EQ(gauss_->erf(4),40);
+	EXPECT_NEAR(-1.000000,gauss_->erf(-5),.000001);
+	EXPECT_NEAR(-0.842701,gauss_->erf(-1),.000001);
+	EXPECT_NEAR(+0.000000,gauss_->erf(+0),.000001);
+	EXPECT_NEAR(+0.842701,gauss_->erf(+1),.000001);
+	EXPECT_NEAR(+0.995322,gauss_->erf(+2),.000001);
+	EXPECT_NEAR(+1.000000,gauss_->erf(+5),.000001);
 }
 
-TEST_P(GaussTest, CDF) {
+/*TEST_P(GaussTest, CDF) {
 	EXPECT_EQ(gauss_->cdf(1),10);
 	EXPECT_EQ(gauss_->cdf(2),20);
 }
+
+TEST_P(GaussTest, CDF2) {
+	EXPECT_EQ(gauss_->cdf(1),10);
+	EXPECT_EQ(gauss_->cdf(2),20);
+}*/
+
+//INSTANTIATE_TEST_CASE_P(Impls12, GaussTest,
+//	Values(&GaussFactory2));
 
 INSTANTIATE_TEST_CASE_P(Impls12, GaussTest,
 	Values(&GaussFactory1, &GaussFactory2));
