@@ -76,6 +76,9 @@
     <ClInclude Include="..\include\gtest\internal\gtest-type-util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\gtest-internal-inl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\include\gtest\gtest-param-test.h.pump">
