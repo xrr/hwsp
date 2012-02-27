@@ -1,24 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="GaussianCDF" Collapsed="true">
-    <Position X="2.75" Y="1.5" Width="1.5" />
+  <Class Name="Gauss" Collapsed="true">
+    <Position X="4.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAABAIAAA=</HashCode>
-      <FileName>gaussiancdf.h</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="AbramowitzStegun" Collapsed="true">
-    <Position X="1.5" Y="2.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAABAAAAA=</HashCode>
-      <FileName>gaussiancdf.h</FileName>
+      <FileName>Gauss.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="BoostGauss" Collapsed="true">
-    <Position X="3.75" Y="2.75" Width="1.5" />
+    <Position X="3" Y="3" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAABAIAAA=</HashCode>
-      <FileName>gaussiancdf.h</FileName>
+      <FileName>Gauss.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AbramowitzStegunGauss" Collapsed="true">
+    <Position X="5.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>Gauss.h</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Tahoma" Size="8.25" />
