@@ -97,6 +97,16 @@
     <ClInclude Include="..\include\gtest\gtest.h" />
     <ClInclude Include="..\include\gtest\gtest_pred_impl.h" />
     <ClInclude Include="..\include\gtest\gtest_prod.h" />
+    <ClInclude Include="..\include\gtest\internal\gtest-death-test-internal.h" />
+    <ClInclude Include="..\include\gtest\internal\gtest-filepath.h" />
+    <ClInclude Include="..\include\gtest\internal\gtest-internal.h" />
+    <ClInclude Include="..\include\gtest\internal\gtest-linked_ptr.h" />
+    <ClInclude Include="..\include\gtest\internal\gtest-param-util-generated.h" />
+    <ClInclude Include="..\include\gtest\internal\gtest-param-util.h" />
+    <ClInclude Include="..\include\gtest\internal\gtest-port.h" />
+    <ClInclude Include="..\include\gtest\internal\gtest-string.h" />
+    <ClInclude Include="..\include\gtest\internal\gtest-tuple.h" />
+    <ClInclude Include="..\include\gtest\internal\gtest-type-util.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\include\gtest\gtest-param-test.h.pump" />
