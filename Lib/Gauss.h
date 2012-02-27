@@ -20,14 +20,18 @@ class AbramowitzStegunGauss : public Gauss {
 public:
 	virtual double erf(double x) {return _erf(x);};
 	static double _erf(double x) {
-		double y = 1.0 / ( 1.0 + 0.3275911 * x);   
-		return 1 - (((((
-			+ 1.061405429  * y
-			- 1.453152027) * y
-			+ 1.421413741) * y
-			- 0.284496736) * y 
-			+ 0.254829592) * y) 
-			* exp (-x * x);
+		if (x<0) {
+			return -_erf(-x);
+		} else {
+			double y = 1.0 / ( 1.0 + 0.3275911 * x);   
+			return 1 - (((((
+				+ 1.061405429  * y
+				- 1.453152027) * y
+				+ 1.421413741) * y
+				- 0.284496736) * y 
+				+ 0.254829592) * y) 
+				* exp (-x * x);
+		}
 	};
 };
 
