@@ -1,47 +1,48 @@
 #include "gtest/gtest.h"
-#include "Gauss.h"
 
-using ::testing::TestWithParam;
-using ::testing::Values;
-
-typedef Gauss* GaussFactory();
-Gauss* GaussFactory1() {return new AbramowitzStegunGauss();}
-Gauss* GaussFactory2() {return new BoostGauss();}
-
-class GaussTest : public TestWithParam<GaussFactory*> {
-public:
-	virtual void SetUp() {gauss_= (*GetParam())();}
-	virtual void TearDown() {delete gauss_;}
-	virtual ~GaussTest() { delete gauss_; }
-protected:
-	Gauss* gauss_;
-};
-
-TEST_P(GaussTest, Erf) {
-	EXPECT_NEAR(-1.000000,gauss_->erf(-5),.000001);
-	EXPECT_NEAR(-0.842701,gauss_->erf(-1),.000001);
-	EXPECT_NEAR(+0.000000,gauss_->erf(+0),.000001);
-	EXPECT_NEAR(+0.842701,gauss_->erf(+1),.000001);
-	EXPECT_NEAR(+0.995322,gauss_->erf(+2),.000001);
-	EXPECT_NEAR(+1.000000,gauss_->erf(+5),.000001);
-}
-
-/*TEST_P(GaussTest, CDF) {
-	EXPECT_EQ(gauss_->cdf(1),10);
-	EXPECT_EQ(gauss_->cdf(2),20);
-}
-
-TEST_P(GaussTest, CDF2) {
-	EXPECT_EQ(gauss_->cdf(1),10);
-	EXPECT_EQ(gauss_->cdf(2),20);
-}*/
-
+//#include "Gauss.h"
+//
+//using ::testing::TestWithParam;
+//using ::testing::Values;
+//
+//typedef Gauss* GaussFactory();
+//Gauss* GaussFactory1() {return new AbramowitzStegunGauss();}
+//Gauss* GaussFactory2() {return new BoostGauss();}
+//
+//class GaussTest : public TestWithParam<GaussFactory*> {
+//public:
+//	virtual void SetUp() {gauss_= (*GetParam())();}
+//	virtual void TearDown() {delete gauss_;}
+//	virtual ~GaussTest() { delete gauss_; }
+//protected:
+//	Gauss* gauss_;
+//};
+//
+//TEST_P(GaussTest, Erf) {
+//	EXPECT_NEAR(-1.000000,gauss_->erf(-5),.000001);
+//	EXPECT_NEAR(-0.842701,gauss_->erf(-1),.000001);
+//	EXPECT_NEAR(+0.000000,gauss_->erf(+0),.000001);
+//	EXPECT_NEAR(+0.842701,gauss_->erf(+1),.000001);
+//	EXPECT_NEAR(+0.995322,gauss_->erf(+2),.000001);
+//	EXPECT_NEAR(+1.000000,gauss_->erf(+5),.000001);
+//}
+//
+//TEST_P(GaussTest, CDF) {
+//	EXPECT_EQ(gauss_->cdf(1),10);
+//	EXPECT_EQ(gauss_->cdf(2),20);
+//}
+//
+//TEST_P(GaussTest, CDF2) {
+//	EXPECT_EQ(gauss_->cdf(1),10);
+//	EXPECT_EQ(gauss_->cdf(2),20);
+//}
+//
+////INSTANTIATE_TEST_CASE_P(Impls12, GaussTest,
+////	Values(&GaussFactory2));
+//
 //INSTANTIATE_TEST_CASE_P(Impls12, GaussTest,
-//	Values(&GaussFactory2));
-
-INSTANTIATE_TEST_CASE_P(Impls12, GaussTest,
-	Values(&GaussFactory1, &GaussFactory2));
-
+//	Values(&GaussFactory1, &GaussFactory2));
+//
 
 /* ***************** */
 
