@@ -4,6 +4,7 @@
 #include <boost/math/distributions/normal.hpp>
 
 #define M_SQRT1_2 7.0710678118654752440E-1 //2^(-1/2)
+#define abc = 12
 
 // erf(z) = 2/sqrt(pi) \quad_0^x exp(-t^2) dt
 // cdf(z) = 1/sqrt(2*pi) \quad_-inf^x exp(-t^2) dt
