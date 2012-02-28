@@ -39,8 +39,8 @@ private:
 public:
 	std::vector<double> timesteps;
 
- Tree (double _timesteps, HullWhite hw) : hw_(hw), timesteps(_timesteps) {
-		
+	Tree (std::vector<double> _timesteps, HullWhite hw) : hw_(hw), timesteps(_timesteps) {
+
 		Node node0;
 		node0.relative_position=0;
 		node0.x=0;
@@ -48,7 +48,8 @@ public:
 		date0.push_back(node0);
 		slices.push_back(date0);
 	};
-void construct_1(void) {
+
+	void construct_1(void) {
 		for (std::vector<double>::iterator timestep = timesteps.begin(); timestep != timesteps.end(); timestep++) {
 			std::vector<Node> newdate;
 			double e = exp(-hw_.a*(*timestep));
@@ -95,12 +96,12 @@ void construct_1(void) {
 	}; // void construct_1()
 
 	void print(void) {
-for (std::vector<std::vector<Node>>::iterator currentslice = slices.begin(); currentslice != slices.end(); currentslice++) {
-	for (std::vector<Node>::iterator currentnode = currentslice->begin(); currentnode != currentslice->end(); currentnode++) {
-		std::count <<currentnode->x << " ";
-	}
-	std::count <<std::endl;
-}
+		for (std::vector<std::vector<Node>>::iterator currentslice = slices.begin(); currentslice != slices.end(); currentslice++) {
+			for (std::vector<Node>::iterator currentnode = currentslice->begin(); currentnode != currentslice->end(); currentnode++) {
+				std::cout << currentnode->x << " ";
+			}
+			std::cout << std::endl;
+		}
 	}; // void print()
 
 
