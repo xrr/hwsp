@@ -94,4 +94,3 @@ std::ostream& operator<< (std::ostream& flux, Tree& tree) {
 	}
 	return flux;
 }
-
