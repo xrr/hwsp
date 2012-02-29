@@ -1,0 +1,14 @@
+﻿Build started 2/28/2012 6:59:13 PM.
+Project "Y:\Code\projects\hwsp\Lib\Lib.vcxproj" on node 2 (rebuild target(s)).
+PrepareForBuild:
+  Creating directory "Y:\Code\projects\hwsp\Release\".
+InitializeBuildStatus:
+  Creating "Release\Lib.unsuccessfulbuild" because "AlwaysCreate" was specified.
+FinalizeBuildStatus:
+  Deleting file "Release\Lib.unsuccessfulbuild".
+  Touching "Release\Lib.lastbuildstate".
+Done Building Project "Y:\Code\projects\hwsp\Lib\Lib.vcxproj" (rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.11
