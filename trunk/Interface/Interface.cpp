@@ -15,5 +15,5 @@ int main() {
 	Tree arbre(dt,hw);
 	arbre.construct_1();
 	arbre.print();
-	double a = 0;
+	std::getchar();
 }
