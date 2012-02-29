@@ -1,7 +1,7 @@
-﻿Build started 2/29/2012 2:20:05 AM.
+﻿Build started 2/29/2012 1:30:43 PM.
 Project "Y:\Code\projects\hwsp\Interface\Interface.vcxproj" on node 2 (build target(s)).
 InitializeBuildStatus:
-  Touching "Debug\Interface.unsuccessfulbuild".
+  Creating "Debug\Interface.unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
   c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IY:\Code\projects\hwsp\/Lib/ /I"Y:\Code\projects\hwsp\/boost-1.48.0/" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Interface.cpp
   Interface.cpp
@@ -24,4 +24,4 @@ Done Building Project "Y:\Code\projects\hwsp\Interface\Interface.vcxproj" (build
 
 Build succeeded.
 
-Time Elapsed 00:00:08.75
+Time Elapsed 00:00:11.11
