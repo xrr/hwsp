@@ -13,7 +13,7 @@ int main() {
 	hw.sigma = 0.01;
 
 	Tree arbre(dt,hw);
-	arbre.construct_1();
+	arbre.construct();
 	std::cout << arbre;
 	std::getchar();
 }
