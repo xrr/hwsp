@@ -1,0 +1,33 @@
+﻿Build started 2/28/2012 11:28:25 PM.
+Project "Y:\Code\projects\hwsp\Tests\Tests.vcxproj" on node 2 (build target(s)).
+InitializeBuildStatus:
+  Touching "Debug\Tests.unsuccessfulbuild".
+ClCompile:
+  c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IY:\Code\projects\hwsp\/Lib/ /I"Y:\Code\projects\hwsp\/boost-1.48.0/" /I"Y:\Code\projects\hwsp\/gtest-1.6.0/include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Tests.cpp
+  Tests.cpp
+ManifestResourceCompile:
+  C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\Tests.exe.embed.manifest.res" Debug\Tests_manifest.rc 
+Link:
+  c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Y:\Code\projects\hwsp\Debug\Tests.exe" /INCREMENTAL /NOLOGO /MANIFEST /ManifestFile:"Debug\Tests.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"Y:\Code\projects\hwsp\Debug\Tests.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Y:\Code\projects\hwsp\Debug\Tests.lib" /MACHINE:X86 Debug\Tests.exe.embed.manifest.res
+  Debug\Tests.obj
+  "Y:\Code\projects\hwsp\gtest-1.6.0\msvc\HW\Debug\gtestd.lib"
+  "Y:\Code\projects\hwsp\gtest-1.6.0\msvc\HW\Debug\gtest_maind.lib"
+  Y:\Code\projects\hwsp\Debug\Lib.lib
+Manifest:
+  C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\Tests.exe.embed.manifest" /manifest Debug\Tests.exe.intermediate.manifest
+  C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\Tests.exe.embed.manifest.res" Debug\Tests_manifest.rc 
+LinkEmbedManifest:
+  c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Y:\Code\projects\hwsp\Debug\Tests.exe" /INCREMENTAL /NOLOGO /MANIFEST /ManifestFile:"Debug\Tests.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"Y:\Code\projects\hwsp\Debug\Tests.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Y:\Code\projects\hwsp\Debug\Tests.lib" /MACHINE:X86 Debug\Tests.exe.embed.manifest.res
+  Debug\Tests.obj
+  "Y:\Code\projects\hwsp\gtest-1.6.0\msvc\HW\Debug\gtestd.lib"
+  "Y:\Code\projects\hwsp\gtest-1.6.0\msvc\HW\Debug\gtest_maind.lib"
+  Y:\Code\projects\hwsp\Debug\Lib.lib
+  Tests.vcxproj -> Y:\Code\projects\hwsp\Debug\Tests.exe
+FinalizeBuildStatus:
+  Deleting file "Debug\Tests.unsuccessfulbuild".
+  Touching "Debug\Tests.lastbuildstate".
+Done Building Project "Y:\Code\projects\hwsp\Tests\Tests.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:07.70

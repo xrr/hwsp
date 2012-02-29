@@ -1,0 +1,17 @@
+﻿Build started 2/29/2012 12:06:30 AM.
+Project "Y:\Code\projects\hwsp\gtest-1.6.0\msvc\gtest_main.vcxproj" on node 2 (build target(s)).
+InitializeBuildStatus:
+  Creating "HW/Debug\gtest_main\gtest_main.unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  All outputs are up-to-date.
+Lib:
+  All outputs are up-to-date.
+  gtest_main.vcxproj -> Y:\Code\projects\hwsp\gtest-1.6.0\msvc\HW/Debug\gtest_maind.lib
+FinalizeBuildStatus:
+  Deleting file "HW/Debug\gtest_main\gtest_main.unsuccessfulbuild".
+  Touching "HW/Debug\gtest_main\gtest_main.lastbuildstate".
+Done Building Project "Y:\Code\projects\hwsp\gtest-1.6.0\msvc\gtest_main.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.78

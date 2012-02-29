@@ -1,0 +1,18 @@
+﻿Build started 2/28/2012 6:59:21 PM.
+Project "Y:\Code\projects\hwsp\Tests\Tests.vcxproj" on node 2 (rebuild target(s)).
+InitializeBuildStatus:
+  Creating "Release\Tests.unsuccessfulbuild" because "AlwaysCreate" was specified.
+ClCompile:
+  c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IY:\Code\projects\hwsp\/Lib/ /I"Y:\Code\projects\hwsp\/boost-1.48.0/" /I"Y:\Code\projects\hwsp\/gtest-1.6.0/include" /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Tests.cpp
+  Tests.cpp
+Link:
+  c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Y:\Code\projects\hwsp\Release\Tests.exe" /INCREMENTAL:NO /NOLOGO /MANIFEST /ManifestFile:"Release\Tests.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"Y:\Code\projects\hwsp\Release\Tests.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Y:\Code\projects\hwsp\Release\Tests.lib" /MACHINE:X86 Release\Tests.obj
+  "Y:\Code\projects\hwsp\gtest-1.6.0\msvc\HW\Release\gtest.lib"
+  "Y:\Code\projects\hwsp\gtest-1.6.0\msvc\HW\Release\gtest_main.lib"
+  Y:\Code\projects\hwsp\Release\Lib.lib
+LINK : fatal error LNK1181: cannot open input file 'Y:\Code\projects\hwsp\Release\Lib.lib'
+Done Building Project "Y:\Code\projects\hwsp\Tests\Tests.vcxproj" (rebuild target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:01.91
