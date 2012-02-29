@@ -3,6 +3,16 @@
 #include <vector>
 #include <math.h>
 #include <boost/math/special_functions/round.hpp>
+#include <sstream>
+
+std::string fixed_percentage (double value, int precision = 3) {
+	std::ostringstream out (std::ostringstream::out);
+	if (0==value) precision--;
+	out.precision(precision);
+	out << std::showpoint << std::showpos << std::setw(precision) << std::left;
+	out << 100*value << "%";
+	return out.str();
+};
 
 class HullWhite {
 public:
@@ -27,12 +37,15 @@ public:
 };
 
 class Tree {
+
 private:
 	HullWhite hw_;
 	std::vector<std::vector<Node>> slices;
 
 public:
 	std::vector<double> timesteps;
+
+	friend std::ostream& operator<< (std::ostream&, Tree&);
 
 	Tree (std::vector<double> _timesteps, HullWhite hw) : hw_(hw), timesteps(_timesteps) {
 		std::vector<Node> date0;
@@ -52,7 +65,8 @@ public:
 				double R = (M-k*delta_x)/V; // eta/V
 				for(int l=-1;l<=+1;l++) {
 					Transition newtransition;
-					newtransition.probability = (1+R*R)/6.0+((0==l)?(1-R*R):(0>l?-1:1)*R/sqrt(3.0))/2.0;
+					//newtransition.probability = (1+R*R)/6.0+((0==l)?(1-R*R):(0>l?-1:1)*R/sqrt(3.0))/2.0;
+					newtransition.probability = (1+R*R)/6.0+((0==l)?(1-R*R):l*R/sqrt(3.0))/2.0;
 					newtransition.destination = NULL; // todo : while loop
 					for (auto existingnode = newdate.begin(); existingnode != newdate.end(); existingnode++)
 						if (existingnode->relative_position == k+l) newtransition.destination = &(*existingnode);
@@ -68,19 +82,17 @@ public:
 	}; // void construct_1()
 	//todo = check transition pointers ?
 
-	void print(void) {
-		std::cout.precision(4);
-		//for (auto currentslice = slices.begin(); currentslice != slices.end(); currentslice++) {
-		for (auto currentslice = slices.begin(); currentslice != slices.end(); currentslice++) {
-			for (auto currentnode = currentslice->begin(); currentnode != currentslice->end(); currentnode++) {
-				std::cout << std::showpoint << std::showpos << std::setw(8) << std::left << currentnode->x << " ";
-			}
-			std::cout << "\n";
-		}
-	}; // void print()
-
-
 }; //class Tree
+
+std::ostream& operator<< (std::ostream& flux, Tree& tree) {
+	for (auto currentslice = tree.slices.begin(); currentslice != tree.slices.end(); currentslice++) {
+		for (auto currentnode = currentslice->begin(); currentnode != currentslice->end(); currentnode++) {
+			flux << fixed_percentage(currentnode->x) << " ";
+		}
+		flux << "\n";
+	}
+	return flux;
+}
 
 
 

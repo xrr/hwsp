@@ -14,6 +14,6 @@ int main() {
 
 	Tree arbre(dt,hw);
 	arbre.construct_1();
-	arbre.print();
+	std::cout << arbre;
 	std::getchar();
 }
