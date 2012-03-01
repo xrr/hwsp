@@ -1,30 +1,26 @@
 #include <iostream>
-#include "Node.h"
+#include <fstream>
 
+#include "Node.h"
 #include <math.h>
 
 int main() {
 
 	Curve courbe;
 
-	for (int i = 0 ; i<3 ; i++) courbe.times.push_back(1+i);
-	courbe.rates.push_back(0.0382365);
-	courbe.rates.push_back(0.0451162);
-	courbe.rates.push_back(0.0508626);
+	for (int i = 0 ; i<100 ; i++) {
+		courbe.times.push_back(0.2*(1+i));
+		courbe.rates.push_back(0.08-0.05*exp(-0.18*(0.2*(1+i))));
+	}
 
-	//for (int i = 0 ; i<4 ; i++) courbe.times.push_back(1+i);
-	//courbe.rates.push_back(0.05092755);
-	//courbe.rates.push_back(0.05795397);
-	//courbe.rates.push_back(0.06304557);
-	//courbe.rates.push_back(0.06733466);
-
-	HullWhite hw;
-	hw.a = 0.1;
-	hw.sigma = 0.01;
-	hw.ratecurve = courbe;
-
-	Tree arbre(hw);
+	Tree arbre(HullWhite(0.1, 0.01, courbe));
 	arbre.construct();
+	
+	std::ofstream(std::ofstream("arbre.csv", std::ios::trunc)) << arbre;
+	
 	std::cout << "\n" << arbre;
+
+	
 	std::getchar();
 }
+

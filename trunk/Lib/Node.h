@@ -36,6 +36,7 @@ class HullWhite {
 public:
 	double a, sigma;
 	Curve ratecurve;
+	HullWhite(double _a, double _sigma, Curve _ratecurve) : a(_a), sigma(_sigma), ratecurve(_ratecurve) {};
 };
 
 class Node;
@@ -98,7 +99,7 @@ public:
 						newtransition.destination=&newdate.back();
 					}
 					currentnode->transitions[1+l]=newtransition;
-					newtransition.destination->q+=currentnode->q*newtransition.probability*exp(-(currentnode->alpha+currentnode->x)*delta_t);
+					newtransition.destination->q+=currentnode->q*newtransition.probability*exp(-currentnode->r()*delta_t);
 				}
 			}
 			dates.push_back(newdate);
@@ -115,7 +116,7 @@ public:
 std::ostream& operator<< (std::ostream& flux, Tree& tree) {
 	for (auto currentdate = tree.dates.begin(); currentdate != tree.dates.end(); currentdate++) {
 		for (auto currentnode = currentdate->begin(); currentnode != currentdate->end(); currentnode++) {
-			flux << fixed_percentage(currentnode->r()) << " ";
+			flux << fixed_percentage(currentnode->r(),5) << "; ";
 			/*flux << fixed_percentage(currentnode->transitions[2].probability) << " "
 				<< fixed_percentage(currentnode->transitions[1].probability) << " "
 				<< fixed_percentage(currentnode->transitions[0].probability) << " ";
