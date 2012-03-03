@@ -1,17 +1,18 @@
-﻿Build started 2/29/2012 12:06:30 AM.
-Project "Y:\Code\projects\hwsp\gtest-1.6.0\msvc\gtest_main.vcxproj" on node 2 (build target(s)).
+﻿Build started 3/3/2012 3:47:11 PM.
+Project "Y:\Code\projects\hwsp\gtest-1.6.0\msvc\gtest_main.vcxproj" on node 2 (rebuild target(s)).
 InitializeBuildStatus:
   Creating "HW/Debug\gtest_main\gtest_main.unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  All outputs are up-to-date.
+  c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I.. /I..\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"HW/Debug\gtest_main\\" /Fd"HW/Debug\gtest_main\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\src\gtest_main.cc
+  gtest_main.cc
 Lib:
-  All outputs are up-to-date.
+  c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"HW/Debug\gtest_maind.lib" /NOLOGO HW/Debug\gtest_main\gtest_main.obj
   gtest_main.vcxproj -> Y:\Code\projects\hwsp\gtest-1.6.0\msvc\HW/Debug\gtest_maind.lib
 FinalizeBuildStatus:
   Deleting file "HW/Debug\gtest_main\gtest_main.unsuccessfulbuild".
   Touching "HW/Debug\gtest_main\gtest_main.lastbuildstate".
-Done Building Project "Y:\Code\projects\hwsp\gtest-1.6.0\msvc\gtest_main.vcxproj" (build target(s)).
+Done Building Project "Y:\Code\projects\hwsp\gtest-1.6.0\msvc\gtest_main.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.78
+Time Elapsed 00:00:02.23

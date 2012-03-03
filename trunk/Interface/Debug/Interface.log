@@ -1,7 +1,7 @@
-﻿Build started 2/29/2012 1:30:43 PM.
+﻿Build started 3/3/2012 4:29:58 PM.
 Project "Y:\Code\projects\hwsp\Interface\Interface.vcxproj" on node 2 (build target(s)).
 InitializeBuildStatus:
-  Creating "Debug\Interface.unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Touching "Debug\Interface.unsuccessfulbuild".
 ClCompile:
   c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /IY:\Code\projects\hwsp\/Lib/ /I"Y:\Code\projects\hwsp\/boost-1.48.0/" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Interface.cpp
   Interface.cpp
@@ -13,9 +13,11 @@ Link:
   Y:\Code\projects\hwsp\Debug\Lib.lib
 Manifest:
   C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\Interface.exe.embed.manifest" /manifest Debug\Interface.exe.intermediate.manifest
-  All outputs are up-to-date.
+  C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\Interface.exe.embed.manifest.res" Debug\Interface_manifest.rc 
 LinkEmbedManifest:
-  All outputs are up-to-date.
+  c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Y:\Code\projects\hwsp\Debug\Interface.exe" /INCREMENTAL /NOLOGO /MANIFEST /ManifestFile:"Debug\Interface.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"Y:\Code\projects\hwsp\Debug\Interface.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Y:\Code\projects\hwsp\Debug\Interface.lib" /MACHINE:X86 Debug\Interface.exe.embed.manifest.res
+  Debug\Interface.obj
+  Y:\Code\projects\hwsp\Debug\Lib.lib
   Interface.vcxproj -> Y:\Code\projects\hwsp\Debug\Interface.exe
 FinalizeBuildStatus:
   Deleting file "Debug\Interface.unsuccessfulbuild".
@@ -24,4 +26,4 @@ Done Building Project "Y:\Code\projects\hwsp\Interface\Interface.vcxproj" (build
 
 Build succeeded.
 
-Time Elapsed 00:00:11.11
+Time Elapsed 00:01:01.15

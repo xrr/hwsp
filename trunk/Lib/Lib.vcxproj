@@ -14,8 +14,11 @@
     <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Payoffs.h" />
     <ClInclude Include="Gauss.h" />
-    <ClInclude Include="Node.h" />
+    <ClInclude Include="Models.h" />
+    <ClInclude Include="Pricers.h" />
+    <ClInclude Include="Tools.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F8FF79D4-BF74-466E-A3EB-DEC15F3A0B79}</ProjectGuid>
