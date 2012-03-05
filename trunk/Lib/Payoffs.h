@@ -7,7 +7,7 @@ public:
 	//private :
 	//	std::vector<double> vect_;
 	//public :
-	//	Dates(std::vector<double> values) : vect_(values) {};
+	Dates(std::vector<double> values) : vect(values) {};
 	double operator()(int i) {return vect[i];};
 	int size(void) {return vect.size();};
 };

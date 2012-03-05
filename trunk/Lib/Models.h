@@ -14,6 +14,16 @@ public:
 		};
 		return exp(-tmp);
 	};
+	double rate(double time) {
+		double prev_time = 0, tmp = 0;
+		unsigned int k=0; while((k < times.size()) && (times[k]<=time)) {
+			tmp=rates[k];
+			//tmp = rates[k]*(time/times[k]);
+			k++;
+		};
+		return tmp;
+	};
+
 };
 
 class HullWhite {

@@ -101,9 +101,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Tests.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="GaussTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
