@@ -23,8 +23,10 @@ public :
 		double PrixSwap=0;
 		double prev_paymentdate = swap.startdate;
 		for (int i=0; i<=swap.paymentdates.size()-1; i++) {
-			PrixSwap += swap.strikerate*ratecurve.zerocoupon(swap.paymentdates(i)) - 
-				(1/(swap.paymentdates(i)- prev_paymentdate)*(ratecurve.zerocoupon(i)/ratecurve.zerocoupon(prev_paymentdate)-1))*ratecurve.zerocoupon(swap.paymentdates(i)) ;
+			double Libor = (1/(swap.paymentdates(i)- prev_paymentdate))*(ratecurve.zerocoupon(prev_paymentdate)/ratecurve.zerocoupon(swap.paymentdates(i))-1);
+			std::cout << "Libor :" << Libor << "\n";
+			PrixSwap += ratecurve.zerocoupon(swap.paymentdates(i))*(swap.strikerate - 
+				(1/(swap.paymentdates(i)- prev_paymentdate)*(ratecurve.zerocoupon(prev_paymentdate)/ratecurve.zerocoupon(swap.paymentdates(i))-1)));
 			prev_paymentdate = swap.paymentdates(i);
 		}
 		return PrixSwap;

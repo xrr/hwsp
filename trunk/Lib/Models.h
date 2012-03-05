@@ -6,24 +6,21 @@ public:
 	std::vector<double> times;
 	std::vector<double> rates;
 	double zerocoupon(double time) {
-		double prev_time = 0, tmp = 0;
-		unsigned int k=0; while((k < times.size()) && (times[k]<=time)) {
-			tmp+=rates[k]*(times[k]-prev_time);
-			prev_time = times[k];
+		double prev_time = 0, tmp = ((time<=times[0])?rates[0]*time:0);
+		unsigned int k=0; while((k<times.size()) && (times[k]<time)) {
+			tmp+=rates[k]*(std::min<double>(time,((k==times.size()-1)?time:times[k+1]))-prev_time);
+			if (times.size()-1!=k) prev_time = times[k+1];
 			k++;
 		};
 		return exp(-tmp);
 	};
 	double rate(double time) {
-		double prev_time = 0, tmp = 0;
-		unsigned int k=0; while((k < times.size()) && (times[k]<=time)) {
-			tmp=rates[k];
-			//tmp = rates[k]*(time/times[k]);
-			k++;
-		};
-		return tmp;
+		if (time<=times[0]) return rates[0]; 
+		else {
+			unsigned int k=0; while((k<times.size()) && (times[k]<=time)) k++;
+			return rates[k-1];
+		}
 	};
-
 };
 
 class HullWhite {
