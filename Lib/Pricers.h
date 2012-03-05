@@ -23,8 +23,8 @@ public :
 		double PrixSwap=0;
 		double prev_paymentdate = swap.startdate;
 		for (int i=0; i<=swap.paymentdates.size()-1; i++) {
-			PrixSwap = swap.strikerate*ratecurve.zerocoupon(swap.paymentdates(i)) - 
-				(1/(swap.paymentdates(i)- prev_paymentdate)*(ratecurve.zerocoupon(i)/ratecurve.zerocoupon(prev_paymentdate)-1)) ;
+			PrixSwap += swap.strikerate*ratecurve.zerocoupon(swap.paymentdates(i)) - 
+				(1/(swap.paymentdates(i)- prev_paymentdate)*(ratecurve.zerocoupon(i)/ratecurve.zerocoupon(prev_paymentdate)-1))*ratecurve.zerocoupon(swap.paymentdates(i)) ;
 			prev_paymentdate = swap.paymentdates(i);
 		}
 		return PrixSwap;
@@ -183,9 +183,8 @@ public :
 		}
 		
 		double r_star = target;
-		std::cout << r_star << " -> " << f(swaption,r_star) << "\n";
+		//std::cout << r_star << " -> " << f(swaption,r_star) << "\n";
 	
-
 		
 		AbramowitzStegunGauss gauss;
 		double PrixSwaption_payer = 0, PrixSwaption_receiver=0;
