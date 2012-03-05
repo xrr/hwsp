@@ -9,13 +9,14 @@ int main() {
 
 	RateCurve courbe;
 
-	for (int i = 0 ; i<2 ; i++) {
-		courbe.times.push_back(1*(2+i));
-		courbe.rates.push_back(0.08-0.05*exp(-0.18*(1*(2+i))));
+	for (int i = 0 ; i<10 ; i++) {
+		courbe.times.push_back(0.2*(2+i));
+		//courbe.rates.push_back(0.08-0.05*exp(-0.18*(0.2*(2+i))));
+	courbe.rates.push_back(0.05);
 	}
 
 	Dates d(courbe.times);
-	Swap swap(0.07,1,d);
+	Swap swap(0.05,0.4,d);
 	//RateCurve courb2;
 	//	courbe2.times.push_back(0);
 	//Dates mat_swaption(
