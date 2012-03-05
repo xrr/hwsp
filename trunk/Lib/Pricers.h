@@ -23,11 +23,11 @@ public :
 		double PrixSwap=0;
 		double prev_paymentdate = swap.startdate;
 		for (int i=0; i<=swap.paymentdates.size()-1; i++) {
-			double Libor = (1/(swap.paymentdates(i)- prev_paymentdate))*(ratecurve.zerocoupon(prev_paymentdate)/ratecurve.zerocoupon(swap.paymentdates(i))-1);
-			std::cout << "Libor :" << Libor << "\n";
-			PrixSwap += ratecurve.zerocoupon(swap.paymentdates(i))*(swap.strikerate - 
-				(1/(swap.paymentdates(i)- prev_paymentdate)*(ratecurve.zerocoupon(prev_paymentdate)/ratecurve.zerocoupon(swap.paymentdates(i))-1)));
-			prev_paymentdate = swap.paymentdates(i);
+			double Libor = (1/(swap.paymentdates[i]- prev_paymentdate))*(ratecurve.zerocoupon(prev_paymentdate)/ratecurve.zerocoupon(swap.paymentdates[i])-1);
+			//std::cout << "Libor :" << Libor << "\n";
+			PrixSwap += ratecurve.zerocoupon(swap.paymentdates[i])*(swap.strikerate - 
+				(1/(swap.paymentdates[i]- prev_paymentdate)*(ratecurve.zerocoupon(prev_paymentdate)/ratecurve.zerocoupon(swap.paymentdates[i])-1)));
+			prev_paymentdate = swap.paymentdates[i];
 		}
 		return PrixSwap;
 	};
@@ -145,10 +145,10 @@ private :
 		double res=0;
 		for(int i=0; i<=swaption.swap.paymentdates.size()-1; i++) {
 					double prev_paymentdate = swaption.swap.startdate;
-					double c=swaption.swap.strikerate*(swaption.swap.paymentdates(i)-prev_paymentdate);
-					prev_paymentdate = swaption.swap.paymentdates(i);
+					double c=swaption.swap.strikerate*(swaption.swap.paymentdates[i]-prev_paymentdate);
+					prev_paymentdate = swaption.swap.paymentdates[i];
 					if (i=swaption.swap.paymentdates.size()-1) {c=c+1;}
-					double X = A(swaption.swap.startdate, swaption.swap.paymentdates(i))*exp(-B(swaption.swap.startdate,swaption.swap.paymentdates(i))*r);
+					double X = A(swaption.swap.startdate, swaption.swap.paymentdates[i])*exp(-B(swaption.swap.startdate,swaption.swap.paymentdates[i])*r);
 				res += c*X;
 				}
 	return res;
@@ -191,15 +191,15 @@ public :
 		AbramowitzStegunGauss gauss;
 		double PrixSwaption_payer = 0, PrixSwaption_receiver=0;
 		for(int i=0; i<=swaption.swap.paymentdates.size()-1; i++) {
-			double prev_paymentdate = swaption.swap.startdate; // remplacer 0 par startdate
-			double c=swaption.swap.strikerate*(swaption.swap.paymentdates(i)-prev_paymentdate);
-			prev_paymentdate = swaption.swap.paymentdates(i);
+			double prev_paymentdate = swaption.swap.startdate;
+			double c=swaption.swap.strikerate*(swaption.swap.paymentdates[i]-prev_paymentdate);
+			prev_paymentdate = swaption.swap.paymentdates[i];
 			if (i=swaption.swap.paymentdates.size()-1) {c=c+1;}
-			double X = A(swaption.swap.startdate, swaption.swap.paymentdates(i))*exp(-B(swaption.swap.startdate,swaption.swap.paymentdates(i))*r_star);
-			double sigma_p = hullwhite.sigma*sqrt((1-exp(-2*hullwhite.a*(swaption.swap.startdate-swaption.swap.paymentdates(i))))/(2*hullwhite.a))*B(swaption.swap.startdate,swaption.swap.paymentdates(i));
-			double h = (1.0/sigma_p)*log(ratecurve.zerocoupon(swaption.swap.paymentdates(i))/(ratecurve.zerocoupon(swaption.swap.startdate)*X))+sigma_p/2;
-			double ZBP = X*ratecurve.zerocoupon(swaption.swap.startdate)*gauss.cdf(-h+sigma_p) - ratecurve.zerocoupon(swaption.swap.paymentdates(i))*gauss.cdf(-h);
-			double ZBC = -X*ratecurve.zerocoupon(swaption.swap.startdate) + ratecurve.zerocoupon(swaption.swap.paymentdates(i)) +ZBP;
+			double X = A(swaption.swap.startdate, swaption.swap.paymentdates[i])*exp(-B(swaption.swap.startdate,swaption.swap.paymentdates[i])*r_star);
+			double sigma_p = hullwhite.sigma*sqrt((1-exp(-2*hullwhite.a*(swaption.swap.startdate)))/(2*hullwhite.a))*B(swaption.swap.startdate,swaption.swap.paymentdates[i]);
+			double h = (1.0/sigma_p)*log(ratecurve.zerocoupon(swaption.swap.paymentdates[i])/(ratecurve.zerocoupon(swaption.swap.startdate)*X))+sigma_p/2;
+			double ZBP = X*ratecurve.zerocoupon(swaption.swap.startdate)*gauss.cdf(-h+sigma_p) - ratecurve.zerocoupon(swaption.swap.paymentdates[i])*gauss.cdf(-h);
+			double ZBC = -X*ratecurve.zerocoupon(swaption.swap.startdate) + ratecurve.zerocoupon(swaption.swap.paymentdates[i]) +ZBP;
 			PrixSwaption_payer += c*ZBP;
 			PrixSwaption_receiver += c*ZBC;
 		}//boucle swaption

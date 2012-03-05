@@ -37,17 +37,20 @@ int main() {
 
 	RateCurve courbe;
 
-	for (int i = 0 ; i<10 ; i++) {
-		courbe.times.push_back(0.02*(1+i));
+	for (int i = 0 ; i<3 ; i++) {
+		//courbe.times.push_back(0.02*(1+i));
 		//courbe.rates.push_back(0.08-0.05*exp(-0.18*(0.2*(2+i))));
-	courbe.rates.push_back(0.05);
+		//courbe.rates.push_back(0.05);
+		courbe.times.push_back(2+i);
+		courbe.rates.push_back(0.05);
+	
 	}
 
 	Dates d(courbe.times);
-	Swap swap(0.05,0.01,d);
-	Swaption swaption1(swap, d, true);
-	Swaption swaption2(swap, d, false);
-	HullWhite hullwhite(0.1, 0.01);
+	Swap swap(0.05,1,d);
+	Swaption swaption1(swap, true);
+	Swaption swaption2(swap, false);
+	HullWhite hullwhite(0.05, 0.01);
 	
 	std::cout << "Prix du Swaption payer :" << ClosedFormula (courbe, hullwhite).Evaluate(swaption1) << "\n";
 	std::cout << "Prix du Swaption receiver :" << ClosedFormula (courbe, hullwhite).Evaluate(swaption2) << "\n";
