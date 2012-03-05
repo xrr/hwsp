@@ -18,15 +18,15 @@ class Payoff {};
 class Swap : public Payoff {
 public :
 	double strikerate;
+	double startdate;
 	Dates paymentdates;
-	Swap(double _strikerate, Dates _paymentdates) : strikerate(_strikerate), paymentdates(_paymentdates) {};
+	Swap(double _strikerate, double _startdate, Dates _paymentdates) : strikerate(_strikerate), startdate(_startdate), paymentdates(_paymentdates) {};
 };
 
 class Swaption : public Payoff {
 public :
 	Swap swap;
-	Dates exercisedates; // first date implementation for now (no berm option)
 	bool ispayeroption; // false : receiver swaption
 	Swaption(Swap _swap, Dates _exercisedates, bool _ispayeroption) :
-		swap(_swap), exercisedates(_exercisedates), ispayeroption(_ispayeroption) {};
+		swap(_swap), ispayeroption(_ispayeroption) {};
 };

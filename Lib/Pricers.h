@@ -137,11 +137,11 @@ private :
 	double f(Swaption swaption, double r) {
 		double res=0;
 		for(int i=0; i<=swaption.swap.paymentdates.size()-1; i++) {
-					double prev_paymentdate = 0;
+					double prev_paymentdate = swaption.swap.startdate;
 					double c=swaption.swap.strikerate*(swaption.swap.paymentdates(i)-prev_paymentdate);
 					prev_paymentdate = swaption.swap.paymentdates(i);
 					if (i=swaption.swap.paymentdates.size()-1) {c=c+1;}
-					double X = A(swaption.exercisedates(0), swaption.swap.paymentdates(i))*exp(-B(swaption.exercisedates(0),swaption.swap.paymentdates(i))*r);
+					double X = A(swaption.swap.startdate, swaption.swap.paymentdates(i))*exp(-B(swaption.swap.startdate,swaption.swap.paymentdates(i))*r);
 				res += c*X;
 				}
 	return res;
@@ -183,24 +183,28 @@ public :
 
 		
 		AbramowitzStegunGauss gauss;
-		double PrixSwaption = 0;
+		double PrixSwaption_payer = 0, PrixSwaption_receiver=0;
 		for(int i=0; i<=swaption.swap.paymentdates.size()-1; i++) {
-			double prev_paymentdate = 0; // remplacer 0 par startdate
+			double prev_paymentdate = swaption.swap.startdate; // remplacer 0 par startdate
 			double c=swaption.swap.strikerate*(swaption.swap.paymentdates(i)-prev_paymentdate);
 			prev_paymentdate = swaption.swap.paymentdates(i);
 			if (i=swaption.swap.paymentdates.size()-1) {c=c+1;}
-			double X = A(swaption.exercisedates(0), swaption.swap.paymentdates(i))*exp(-B(swaption.exercisedates(0),swaption.swap.paymentdates(i))*r_star);
-			double s1= 1-exp(-2*hullwhite.a*(swaption.exercisedates(0)));
+			double X = A(swaption.swap.startdate, swaption.swap.paymentdates(i))*exp(-B(swaption.swap.startdate,swaption.swap.paymentdates(i))*r_star);
+			double s1= 1-exp(-2*hullwhite.a*(swaption.swap.startdate));
 			double s2= 2*hullwhite.a;
-			double s3= B(swaption.exercisedates(0),swaption.swap.paymentdates(i));
+			double s3= B(swaption.swap.startdate,swaption.swap.paymentdates(i));
 			//double sigma_p = hullwhite.sigma*sqrt((1-exp(-2*hullwhite.a*(swaption.exercisedates(0)-swaption.swap.paymentdates(i))))/(2*hullwhite.a))*B(swaption.exercisedates(0),swaption.swap.paymentdates(i));
 			double sigma_p = hullwhite.sigma*sqrt(s1/s2)*s3;
-			double h = 1/sigma_p*log(ratecurve.zerocoupon(swaption.swap.paymentdates(i))/(ratecurve.zerocoupon(swaption.exercisedates(0))*X))+sigma_p/2;
-			double ZBP = X*ratecurve.zerocoupon(swaption.exercisedates(0))*gauss.cdf(-h+sigma_p) - ratecurve.zerocoupon(swaption.swap.paymentdates(i))*gauss.cdf(-h);
-			PrixSwaption += c*ZBP;
+			double h = (1.0/sigma_p)*log(ratecurve.zerocoupon(swaption.swap.paymentdates(i))/(ratecurve.zerocoupon(swaption.swap.startdate)*X))+sigma_p/2;
+			double ZBP = X*ratecurve.zerocoupon(swaption.swap.startdate)*gauss.cdf(-h+sigma_p) - ratecurve.zerocoupon(swaption.swap.paymentdates(i))*gauss.cdf(-h);
+			double z1 = -X*ratecurve.zerocoupon(swaption.swap.startdate);
+			double z2 = ratecurve.zerocoupon(swaption.swap.paymentdates(i));
+			double ZBC = -X*ratecurve.zerocoupon(swaption.swap.startdate) + ratecurve.zerocoupon(swaption.swap.paymentdates(i)) +ZBP;
+			PrixSwaption_payer += c*ZBP;
+			PrixSwaption_receiver += c*ZBC;
 		}//boucle swaption
-
-		return PrixSwaption; //todo : verifier si le swaption est payer ou receiver ( => return PrixSwapion ou - PrixSwaption )
+		if (swaption.ispayeroption == true) {return PrixSwaption_payer;}
+		else {return PrixSwaption_receiver;}
 	};
 };
 
