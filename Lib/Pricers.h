@@ -195,7 +195,7 @@ public :
 			double s3= B(swaption.exercisedates(0),swaption.swap.paymentdates(i));
 			//double sigma_p = hullwhite.sigma*sqrt((1-exp(-2*hullwhite.a*(swaption.exercisedates(0)-swaption.swap.paymentdates(i))))/(2*hullwhite.a))*B(swaption.exercisedates(0),swaption.swap.paymentdates(i));
 			double sigma_p = hullwhite.sigma*sqrt(s1/s2)*s3;
-			double h = 1/sigma_p*log(ratecurve.zerocoupon(swaption.swap.paymentdates(i))/(swaption.exercisedates(0)*X))+sigma_p/2;
+			double h = 1/sigma_p*log(ratecurve.zerocoupon(swaption.swap.paymentdates(i))/(ratecurve.zerocoupon(swaption.exercisedates(0))*X))+sigma_p/2;
 			double ZBP = X*ratecurve.zerocoupon(swaption.exercisedates(0))*gauss.cdf(-h+sigma_p) - ratecurve.zerocoupon(swaption.swap.paymentdates(i))*gauss.cdf(-h);
 			PrixSwaption += c*ZBP;
 		}//boucle swaption
