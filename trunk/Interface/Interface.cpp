@@ -23,8 +23,10 @@ int main() {
 	Swaption swaption2(swap, d, false);
 	HullWhite hullwhite(0.1, 0.01);
 	
-	std::cout << ClosedFormula (courbe, hullwhite).Evaluate(swaption1) << "\n";
-	std::cout << ClosedFormula (courbe, hullwhite).Evaluate(swaption2) << "\n";
+	std::cout << "Prix du Swaption payer :" << ClosedFormula (courbe, hullwhite).Evaluate(swaption1) << "\n";
+	std::cout << "Prix du Swaption receiver :" << ClosedFormula (courbe, hullwhite).Evaluate(swaption2) << "\n";
+
+	std::cout << "Prix du Swap Formule fermee :" << PricerGeneric (courbe).Evaluate(swap) << "\n";
 	
 	//std::ofstream(std::ofstream("arbre.csv", std::ios::trunc)) << arbre;
 	//std::cout << "\n" << arbre;

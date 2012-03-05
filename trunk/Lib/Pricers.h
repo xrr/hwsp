@@ -20,10 +20,15 @@ public :
 	PricerGeneric(RateCurve _ratecurve) : ratecurve(_ratecurve) {};
 
 	virtual double Evaluate(Swap swap) {
-		// formule fermee
-		// TODO
-		return -999;
-	}
+		double PrixSwap=0;
+		double prev_paymentdate = swap.startdate;
+		for (int i=0; i<=swap.paymentdates.size()-1; i++) {
+			PrixSwap = swap.strikerate*ratecurve.zerocoupon(swap.paymentdates(i)) - 
+				(1/(swap.paymentdates(i)- prev_paymentdate)*(ratecurve.zerocoupon(i)/ratecurve.zerocoupon(prev_paymentdate)-1)) ;
+			prev_paymentdate = swap.paymentdates(i);
+		}
+		return PrixSwap;
+	};
 };
 
 class PricerOptions : public PricerGeneric {
@@ -68,6 +73,7 @@ public:
 		//todo;
 		return -999;
 	};
+
 
 	Tree (RateCurve _ratecurve, HullWhite _hullwhite) : PricerOptions(_ratecurve, _hullwhite) {
 		std::vector<Node> slice0;
@@ -130,7 +136,6 @@ class ClosedFormula : public PricerOptions {
 private :
 	double B(double t, double T) {return 1/hullwhite.a*(1-exp(-hullwhite.a*(T-t)));};
 	double A(double t, double T) {
-		//todo : ecrire une fonction rate(t) semblable a Zerocoupon(t) (en attendant : valeur bidon = rates[1])
 		return ratecurve.zerocoupon(T)/ratecurve.zerocoupon(t)*exp(
 			B(t,T)*ratecurve.rate(t)-hullwhite.sigma*hullwhite.sigma/(4*hullwhite.a)*(1-exp(-2*hullwhite.a)*B(t,T)*B(t,T)));
 	};
@@ -190,15 +195,9 @@ public :
 			prev_paymentdate = swaption.swap.paymentdates(i);
 			if (i=swaption.swap.paymentdates.size()-1) {c=c+1;}
 			double X = A(swaption.swap.startdate, swaption.swap.paymentdates(i))*exp(-B(swaption.swap.startdate,swaption.swap.paymentdates(i))*r_star);
-			double s1= 1-exp(-2*hullwhite.a*(swaption.swap.startdate));
-			double s2= 2*hullwhite.a;
-			double s3= B(swaption.swap.startdate,swaption.swap.paymentdates(i));
-			//double sigma_p = hullwhite.sigma*sqrt((1-exp(-2*hullwhite.a*(swaption.exercisedates(0)-swaption.swap.paymentdates(i))))/(2*hullwhite.a))*B(swaption.exercisedates(0),swaption.swap.paymentdates(i));
-			double sigma_p = hullwhite.sigma*sqrt(s1/s2)*s3;
+			double sigma_p = hullwhite.sigma*sqrt((1-exp(-2*hullwhite.a*(swaption.swap.startdate-swaption.swap.paymentdates(i))))/(2*hullwhite.a))*B(swaption.swap.startdate,swaption.swap.paymentdates(i));
 			double h = (1.0/sigma_p)*log(ratecurve.zerocoupon(swaption.swap.paymentdates(i))/(ratecurve.zerocoupon(swaption.swap.startdate)*X))+sigma_p/2;
 			double ZBP = X*ratecurve.zerocoupon(swaption.swap.startdate)*gauss.cdf(-h+sigma_p) - ratecurve.zerocoupon(swaption.swap.paymentdates(i))*gauss.cdf(-h);
-			double z1 = -X*ratecurve.zerocoupon(swaption.swap.startdate);
-			double z2 = ratecurve.zerocoupon(swaption.swap.paymentdates(i));
 			double ZBC = -X*ratecurve.zerocoupon(swaption.swap.startdate) + ratecurve.zerocoupon(swaption.swap.paymentdates(i)) +ZBP;
 			PrixSwaption_payer += c*ZBP;
 			PrixSwaption_receiver += c*ZBC;
