@@ -52,11 +52,11 @@ public :
 
 	double f(Swaption swaption, double r) {
 		double res=0;
+		double prev_paymentdate = swaption.swap.startdate;
 		for(std::vector<double>::size_type i=0; i<=swaption.swap.paymentdates.size()-1; ++i) { // todo
-			double prev_paymentdate = swaption.swap.startdate;
 			double c=swaption.swap.strikerate*(swaption.swap.paymentdates[i]-prev_paymentdate);
 			prev_paymentdate = swaption.swap.paymentdates[i];
-			if (i=swaption.swap.paymentdates.size()-1) {c=c+1;}
+			if (i==swaption.swap.paymentdates.size()-1) {c=c+1;}
 			double X = A(swaption.swap.startdate, swaption.swap.paymentdates[i])*exp(-B(swaption.swap.startdate,swaption.swap.paymentdates[i])*r);
 			res += c*X;
 		}
@@ -85,10 +85,10 @@ public :
 		double r_star = target;
 
 		double PrixSwaption = 0;
+		double prev_paymentdate = swaption.swap.startdate;
 		for(std::vector<double>::size_type i=0; i<=swaption.swap.paymentdates.size()-1; ++i) {
-			double prev_paymentdate = swaption.swap.startdate;
 			double c = swaption.swap.strikerate*(swaption.swap.paymentdates[i]-prev_paymentdate);
-			if (swaption.swap.paymentdates.size()-1==i) ++c; // ??
+			if (swaption.swap.paymentdates.size()-1==i) c=c+1; // ?? // c=c+1 au lieu de ++c
 			prev_paymentdate = swaption.swap.paymentdates[i]; // ??
 			double X = A(swaption.swap.startdate, swaption.swap.paymentdates[i])*exp(-B(swaption.swap.startdate,swaption.swap.paymentdates[i])*r_star);
 			double sigma_p = hullwhite.sigma
@@ -118,7 +118,7 @@ public :
 //		for(std::vector<double>::size_type i=0; i<=swaption.swap.paymentdates.size()-1; ++i) {
 //			double prev_paymentdate = swaption.swap.startdate;
 //			double c = swaption.swap.strikerate*(swaption.swap.paymentdates[i]-prev_paymentdate);
-//			if (swaption.swap.paymentdates.size()-1==i) ++c; // ??
+//			if (swaption.swap.paymentdates.size()-1==i) c=c+1; // ??
 //			prev_paymentdate = swaption.swap.paymentdates[i]; // ??
 //			double X = A(swaption.swap.startdate, swaption.swap.paymentdates[i])*exp(-B(swaption.swap.startdate,swaption.swap.paymentdates[i])*r_star);
 //			double sigma_p = hullwhite.sigma
