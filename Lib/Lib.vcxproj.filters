@@ -33,13 +33,5 @@
     <ClInclude Include="Payoffs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="bidon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="bidon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

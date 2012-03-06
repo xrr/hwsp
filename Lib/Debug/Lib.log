@@ -1,18 +1,14 @@
-﻿Build started 3/3/2012 4:29:56 PM.
-Project "Y:\Code\projects\hwsp\Lib\Lib.vcxproj" on node 2 (build target(s)).
+﻿Build started 3/6/2012 2:49:28 AM.
+Project "Y:\Code\projects\hwsp\Lib\Lib.vcxproj" on node 2 (rebuild target(s)).
+_PrepareForClean:
+  Deleting file "Debug\Lib.lastbuildstate".
 InitializeBuildStatus:
   Creating "Debug\Lib.unsuccessfulbuild" because "AlwaysCreate" was specified.
-ClCompile:
-  c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"Y:\Code\projects\hwsp\/boost-1.48.0/" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt biodn.cpp
-  biodn.cpp
-Lib:
-  c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\Lib.exe /OUT:"Y:\Code\projects\hwsp\Debug\Lib.lib" /NOLOGO Debug\biodn.obj
-  Lib.vcxproj -> Y:\Code\projects\hwsp\Debug\Lib.lib
 FinalizeBuildStatus:
   Deleting file "Debug\Lib.unsuccessfulbuild".
   Touching "Debug\Lib.lastbuildstate".
-Done Building Project "Y:\Code\projects\hwsp\Lib\Lib.vcxproj" (build target(s)).
+Done Building Project "Y:\Code\projects\hwsp\Lib\Lib.vcxproj" (rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.87
+Time Elapsed 00:00:00.17

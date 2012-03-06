@@ -90,32 +90,6 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..;..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\include\gtest\gtest-death-test.h" />
-    <ClInclude Include="..\include\gtest\gtest-message.h" />
-    <ClInclude Include="..\include\gtest\gtest-param-test.h" />
-    <ClInclude Include="..\include\gtest\gtest-printers.h" />
-    <ClInclude Include="..\include\gtest\gtest-spi.h" />
-    <ClInclude Include="..\include\gtest\gtest-test-part.h" />
-    <ClInclude Include="..\include\gtest\gtest-typed-test.h" />
-    <ClInclude Include="..\include\gtest\gtest.h" />
-    <ClInclude Include="..\include\gtest\gtest_pred_impl.h" />
-    <ClInclude Include="..\include\gtest\gtest_prod.h" />
-    <ClInclude Include="..\include\gtest\internal\gtest-death-test-internal.h" />
-    <ClInclude Include="..\include\gtest\internal\gtest-filepath.h" />
-    <ClInclude Include="..\include\gtest\internal\gtest-internal.h" />
-    <ClInclude Include="..\include\gtest\internal\gtest-linked_ptr.h" />
-    <ClInclude Include="..\include\gtest\internal\gtest-param-util-generated.h" />
-    <ClInclude Include="..\include\gtest\internal\gtest-param-util.h" />
-    <ClInclude Include="..\include\gtest\internal\gtest-port.h" />
-    <ClInclude Include="..\include\gtest\internal\gtest-string.h" />
-    <ClInclude Include="..\include\gtest\internal\gtest-tuple.h" />
-    <ClInclude Include="..\include\gtest\internal\gtest-type-util.h" />
-    <ClInclude Include="..\src\gtest-internal-inl.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\include\gtest\gtest-param-test.h.pump" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
