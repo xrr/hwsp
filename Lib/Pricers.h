@@ -135,8 +135,7 @@ public :
 //		}
 //		return PrixSwaption;
 //	};
-//};
-
+};
 
 class Node;
 
