@@ -45,15 +45,20 @@ int main() {
 		courbe.rates.push_back(0.05);
 	
 	}
-
-	Dates d(courbe.times);
-	Swap swap(0.05,1,d);
+	Swap swap(0.05,1,courbe.times);
 	Swaption swaption1(swap, true);
 	Swaption swaption2(swap, false);
 	HullWhite hullwhite(0.05, 0.01);
 	
-	std::cout << "Prix du Swaption payer :" << ClosedFormula (courbe, hullwhite).Evaluate(swaption1) << "\n";
-	std::cout << "Prix du Swaption receiver :" << ClosedFormula (courbe, hullwhite).Evaluate(swaption2) << "\n";
+	//Dates d(courbe.times);
+	//Swap swap(0.05,0.4,d);
+
+	
+	//concatenate a 1st vector of dates with the vector of swap dates (start & payments)
+	/*Tree(RateCurve _ratecurve, HullWhite _hullwhite, Swap swap) :  PricerOptions(_ratecurve, _hullwhite) {
+		Dates blabla;
+		Tree(_ratecurve, _hullwhite, blabla);
+	};*/
 
 	std::cout << "Prix du Swap Formule fermee :" << PricerGeneric (courbe).Evaluate(swap) << "\n";
 	//std::cout << "Prix Zero Coupon en 0:" << courbe.zerocoupon(0) << "\n";

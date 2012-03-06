@@ -1,0 +1,11 @@
+RateCurve -> improve
+zerocoupon *= exp(-blabla) : ou pas, mais justifier pour des raisons de performance
+
+http://ramneekhanda.wordpress.com/2011/09/27/hull-white-model-for-interest-rate-derivatives/
+http://lombok.demon.co.uk/financialTap/interestrates/hwtrinomialtree
+
+Graphviz output of the tree
+
+Calibration
+
+cache for expensive functions ?

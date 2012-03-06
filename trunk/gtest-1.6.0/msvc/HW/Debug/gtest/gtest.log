@@ -1,5 +1,7 @@
-﻿Build started 3/3/2012 3:47:06 PM.
+﻿Build started 3/6/2012 2:49:22 AM.
 Project "Y:\Code\projects\hwsp\gtest-1.6.0\msvc\gtest.vcxproj" on node 2 (rebuild target(s)).
+_PrepareForClean:
+  Deleting file "HW/Debug\gtest\gtest.lastbuildstate".
 InitializeBuildStatus:
   Creating "HW/Debug\gtest\gtest.unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
@@ -15,4 +17,4 @@ Done Building Project "Y:\Code\projects\hwsp\gtest-1.6.0\msvc\gtest.vcxproj" (re
 
 Build succeeded.
 
-Time Elapsed 00:00:03.98
+Time Elapsed 00:00:04.78
