@@ -41,31 +41,28 @@ public:
 };
 
 class ClosedFormula : public PricerOptions {
-private :
-	
+
+public :
 	double B(double t, double T) {return 1/hullwhite.a*(1-exp(-hullwhite.a*(T-t)));};
 	double A(double t, double T) {
 		return ratecurve.zerocoupon(T)/ratecurve.zerocoupon(t)*exp(
 			B(t,T)*ratecurve.rate(t)-hullwhite.sigma*hullwhite.sigma/(4*hullwhite.a)*(1-exp(-2*hullwhite.a)*B(t,T)*B(t,T)));
 	};
+	ClosedFormula(RateCurve _ratecurve, HullWhite _hullwhite) : PricerOptions(_ratecurve, _hullwhite) {};
 
 	double f(Swaption swaption, double r) {
 		double res=0;
 		for(std::vector<double>::size_type i=0; i<=swaption.swap.paymentdates.size()-1; ++i) { // todo
-					double prev_paymentdate = swaption.swap.startdate;
-					double c=swaption.swap.strikerate*(swaption.swap.paymentdates[i]-prev_paymentdate);
-					prev_paymentdate = swaption.swap.paymentdates[i];
-					if (i=swaption.swap.paymentdates.size()-1) {c=c+1;}
-					double X = A(swaption.swap.startdate, swaption.swap.paymentdates[i])*exp(-B(swaption.swap.startdate,swaption.swap.paymentdates[i])*r);
-				res += c*X;
-				}
-	return res;
+			double prev_paymentdate = swaption.swap.startdate;
+			double c=swaption.swap.strikerate*(swaption.swap.paymentdates[i]-prev_paymentdate);
+			prev_paymentdate = swaption.swap.paymentdates[i];
+			if (i=swaption.swap.paymentdates.size()-1) {c=c+1;}
+			double X = A(swaption.swap.startdate, swaption.swap.paymentdates[i])*exp(-B(swaption.swap.startdate,swaption.swap.paymentdates[i])*r);
+			res += c*X;
+		}
+		return res;
 	};
 
-public :
-	ClosedFormula(RateCurve _ratecurve, HullWhite _hullwhite) : PricerOptions(_ratecurve, _hullwhite) {};
-
-	
 	virtual double Evaluate(Swaption swaption) {
 
 		//dichotomic root search of r*
@@ -84,7 +81,7 @@ public :
 				f_max = f_target_temp;
 			}
 		}
-		
+
 		double r_star = target;
 
 		double PrixSwaption = 0;
@@ -108,7 +105,37 @@ public :
 		}
 		return PrixSwaption;
 	};
-};
+
+// Romain test, with an external rootsearch method
+//	virtual double Evaluate2(Swaption swaption) {
+//		inline g(double) ;
+//		g(r) = f(swaption,r_);
+//		typedef double mfunc(Swaption,double);
+//		double r_star = dichotomicRootSearch<double, double, mfunc>(&ClosedFormula::f, 1, 0.0010, 0, 1);
+//		//double r_star = dichotomicRootSearch<double, double>(1, 0.0010, 0,1);
+//
+//		double PrixSwaption = 0;
+//		for(std::vector<double>::size_type i=0; i<=swaption.swap.paymentdates.size()-1; ++i) {
+//			double prev_paymentdate = swaption.swap.startdate;
+//			double c = swaption.swap.strikerate*(swaption.swap.paymentdates[i]-prev_paymentdate);
+//			if (swaption.swap.paymentdates.size()-1==i) ++c; // ??
+//			prev_paymentdate = swaption.swap.paymentdates[i]; // ??
+//			double X = A(swaption.swap.startdate, swaption.swap.paymentdates[i])*exp(-B(swaption.swap.startdate,swaption.swap.paymentdates[i])*r_star);
+//			double sigma_p = hullwhite.sigma
+//				* B(swaption.swap.startdate,swaption.swap.paymentdates[i])
+//				* sqrt((1-exp(-2*hullwhite.a*(swaption.swap.startdate)))/(2*hullwhite.a));
+//			double h = sigma_p/2 + (1/sigma_p) * log(
+//				ratecurve.zerocoupon(swaption.swap.paymentdates[i])
+//				/(ratecurve.zerocoupon(swaption.swap.startdate)*X));
+//			int w = (swaption.ispayeroption?1:-1);
+//			AbramowitzStegunGauss gauss;
+//			double ZBO = w * X * ratecurve.zerocoupon(swaption.swap.startdate) * gauss.cdf(w*(sigma_p-h))
+//				- w * ratecurve.zerocoupon(swaption.swap.paymentdates[i]) * gauss.cdf(-w*h);
+//			PrixSwaption += c*ZBO;
+//		}
+//		return PrixSwaption;
+//	};
+//};
 
 
 class Node;
@@ -137,7 +164,7 @@ class Tree : public PricerOptions {
 private:
 	std::vector<std::vector<Node>> slices_;
 	std::vector<double> dates_;
-	
+
 	void resetCashflowValues(void) {
 		for (auto pslice = slices_.begin(); pslice != slices_.end(); ++pslice)
 			for (auto pnode = pslice->begin(); pnode != pslice->end(); ++pnode)
