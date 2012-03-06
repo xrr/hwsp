@@ -61,6 +61,8 @@ int main() {
 	};*/
 
 	std::cout << "Prix du Swap Formule fermee :" << PricerGeneric (courbe).Evaluate(swap) << "\n";
+	std::cout << "Prix du Swaption Formule fermee payer :" << ClosedFormula (courbe, hullwhite).Evaluate(swaption1) << "\n";
+	std::cout << "Prix du Swaption Formule fermee receiver :" << ClosedFormula (courbe, hullwhite).Evaluate(swaption2) << "\n";
 	//std::cout << "Prix Zero Coupon en 0:" << courbe.zerocoupon(0) << "\n";
 
 	////std::ofstream(std::ofstream("arbre.csv", std::ios::trunc)) << arbre;
