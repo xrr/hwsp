@@ -12,22 +12,3 @@ replace the functor by a member function pointer in the dichotomicrootfinder ?
 (or a lambda !? http://www.cprogramming.com/c++11/c++11-lambda-closures.html)
 
 greeks !?
-
-
-
---- linux system browser/
-# // ??
-#include "stdlib.h" // ?
-
-// launch("http://google.com/");
-void launch(const std::string &url)
-{
-  std::string browser = getenv("BROWSER");
-
-  char *args[3];
-  args[0] = (char*)browser.c_str();
-  args[1] = (char*)url.c_str();
-  args[2] = 0;
-
-  execvp(browser.c_str(), args);
-}

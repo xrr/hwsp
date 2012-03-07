@@ -243,20 +243,19 @@ public:
 					newtransition.destination->q+=(*ppcurrentnode)->q*newtransition.probability*exp(-(*ppcurrentnode)->r()*delta_t);
 				}
 			}
-			double alpha = 0;
+			double alpha = 0; // displacement
 			for (auto ppcurrentnode = pnewslice->begin(); ppcurrentnode != pnewslice->end(); ++ppcurrentnode)
 				alpha+=(*ppcurrentnode)->q*exp(-(*ppcurrentnode)->x*delta_t);
-			double t = (pdate+1<dates_.end())?*(pdate+1):*pdate+delta_t;
-			alpha = log(alpha/(ratecurve.zerocoupon(t)))/delta_t;
-			std::cout << t << " : " << alpha;
+			double tplus1 = (pdate+1<dates_.end())?*(pdate+1):*pdate+delta_t;
+			alpha = log(alpha/(ratecurve.zerocoupon(tplus1)))/(tplus1-*pdate);
 			for (auto ppcurrentnode = pnewslice->begin(); ppcurrentnode != pnewslice->end(); ++ppcurrentnode)
 				(*ppcurrentnode)->alpha = alpha;
 			prev_date = *pdate;
 		}
 	};
-
 };
 
+//Graphviz output (see http://en.wikipedia.org/wiki/DOT_language for eg.)
 std::ostream& operator<< (std::ostream& flux, Tree& tree) {
 	flux << "digraph Tree {" << std::endl
 		<< "graph [rankdir=\"LR\",splines=false,label=\"Trinomial Tree\"];" << std::endl
@@ -266,37 +265,15 @@ std::ostream& operator<< (std::ostream& flux, Tree& tree) {
 	for (auto pcurrentslice = tree.slices_.begin(); pcurrentslice < tree.slices_.end(); ++pcurrentslice) {
 		for (auto ppcurrentnode = pcurrentslice->rbegin(); ppcurrentnode < pcurrentslice->rend(); ++ppcurrentnode) {
 			flux <<  "n" << (*ppcurrentnode) << " [label=\""
-				<< "drift-less rate : " << percentage((*ppcurrentnode)->x) << "\\n "
 				<< "short rate : " << percentage((*ppcurrentnode)->r()) << "\\n "
-				<< "claim PV : " << percentage((*ppcurrentnode)->q)
+				<< "driftless rate : " << percentage((*ppcurrentnode)->x) << "\\n "
+				<< "contingent claim PV : " << percentage((*ppcurrentnode)->q)
 				<< "\"];"<< std::endl;
 			for (int l=2; 0<=l; --l)
 				if ((*ppcurrentnode)->transitions[l].destination != NULL)
-				flux << "n" << (*ppcurrentnode) << " -> n" << (*ppcurrentnode)->transitions[l].destination
-				<< " [label=\"p" << (0<l?(1<l?"u":"m"):"d") << " = " << percentage((*ppcurrentnode)->transitions[l].probability) << "\"];"<< std::endl;
-		}
-	flux << std::endl;
-	}
-	flux << "}" << std::endl;
+					flux << "n" << (*ppcurrentnode) << " -> n" << (*ppcurrentnode)->transitions[l].destination
+					<< " [label=\"P(" << (0<l?(1<l?"up":"mid."):"down") << ") = " << percentage((*ppcurrentnode)->transitions[l].probability) << "\"];"<< std::endl;
+		} flux << std::endl;
+	} flux << "}" << std::endl;
 	return flux;
 };
-
-
-//ordering=out;
-//	nodesep=0.6;
-//	node [shape=box];
-//	node [fontsize = "16", shape = "ellipse", color=blue];
-//	edge [arrowsize=0.3];
-//	graph [rankdir = "LR"];
-//	
-//	node_1 -> node_2; [ label = "g" ];
-//	node_1 [label="ID: 1\ntype: 48\nnbr out: 0\nnbr chi: 11"];
-//	node_2 [label="ID: 2\ntype: 8\nnbr out: 0\nnbr chi: 0"];
-//	node_1 -> node_3 [color = red];
-//	}
-//
-//subgraph b {
-//
-////edge [];
-//"node0" [label = "<f0> blabla| <f1>", shape = "record"];
-//"node0":f0 -> "node1":f0 [id = 0];

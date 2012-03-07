@@ -17,7 +17,7 @@ int main () {
 	}
 
 	std::vector<double> tree_dates;
-	for (int i = 0 ; i<4 ; i++) tree_dates.push_back(0.2*(1+i));
+	for (int i = 0 ; i<5 ; i++) tree_dates.push_back(0.2*(1+i));
 	tree_dates.insert(tree_dates.end(), courbe.times.begin(), courbe.times.end());
 
 	HullWhite hullwhite(0.1, 0.01);
