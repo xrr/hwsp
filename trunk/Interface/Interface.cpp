@@ -28,24 +28,20 @@ int main () {
 	Tree pricer_option2(courbe,hullwhite, tree_dates);
 
 
-	//Swap swap(0.05,1,courbe.times);
-	//Swaption swaption1(swap, true);
-	//Swaption swaption2(swap, false);
+	Swap swap(0.05,1,courbe.times);
+	Swaption swaption1(swap, true);
+	Swaption swaption2(swap, false);
 
 
-	//std::cout << "=== Formule fermee ==="  << "\n";
-	//std::cout << "Payeur \t\t: " << percentage(pricer_swap.Evaluate(swap)) << "\n";
-	//std::cout << "Payeuse \t: " << percentage(pricer_option1.Evaluate(swaption1)) << "\n";
-	//std::cout << "Receveuse \t: " << percentage(pricer_option1.Evaluate(swaption2)) << "\n";
-	//std::cout << "=== Arbre trinomial ==="  << "\n";
-	//std::cout << "Payeuse \t: " << percentage(pricer_option2.Evaluate(swaption1)) << "\n";
-	//std::cout << "Receveuse \t: " << percentage(pricer_option2.Evaluate(swaption2)) << "\n";
-
-	//std::cout << "\n" << pricer_option2;
+	std::cout << "=== Formule fermee ==="  << "\n";
+	std::cout << "Payeur \t\t: " << percentage(pricer_swap.Evaluate(swap)) << "\n";
+	std::cout << "Payeuse \t: " << percentage(pricer_option1.Evaluate(swaption1)) << "\n";
+	std::cout << "Receveuse \t: " << percentage(pricer_option1.Evaluate(swaption2)) << "\n";
+	std::cout << "=== Arbre trinomial ==="  << "\n";
+	std::cout << "Payeuse \t: " << percentage(pricer_option2.Evaluate(swaption1)) << "\n";
+	std::cout << "Receveuse \t: " << percentage(pricer_option2.Evaluate(swaption2)) << "\n";
+	
 	std::ofstream(std::ofstream("tree.gv", std::ios::trunc)) << pricer_option2;
-
-
-	////std::ofstream(std::ofstream("arbre.csv", std::ios::trunc)) << arbre;
 
 	std::getchar();
 	return 0;

@@ -181,39 +181,44 @@ private:
 	std::vector<std::vector<Node*>> slices_;
 	std::vector<double> dates_;
 
+
+
+
+public:
+
 	void resetCashflowValues(void) {
 		for (auto pslice = slices_.begin(); pslice < slices_.end(); ++pslice)
 			for (auto ppnode = pslice->begin(); ppnode < pslice->end(); ++ppnode)
 				(*ppnode)->value = 0;
 	};
 
-public:
-
 	friend std::ostream& operator<< (std::ostream&, Tree&);
 
 	virtual double Evaluate(Swaption swaption) {
 		//todo : check dates if dates of swap = last dates of tree
 		resetCashflowValues();
-		auto pdate = dates_.rbegin(); auto i = slices_.size(); auto slice = slices_[i-1];
+		auto pdate = dates_.rbegin(); auto pslice = slices_.rbegin();
 		while (pdate < dates_.rend()) {
-			slice = slices_[i-1]; // TODO IMPROVE !?
-			// DISCLAIMER /!\ *(pdate+1) = t-1 : pdate is a REVERSE iterator
-			for (auto ppnode = slice.begin(); ppnode != slice.end(); ++ppnode) {
+			// DISCLAIMER /!\ *(pdate+1) = t-1 : REVERSE iterators
+			for (auto ppnode = pslice->begin(); ppnode < pslice->end(); ++ppnode) {
 				if (pdate != dates_.rbegin()) for (int l=0; l<3; ++l) // discounted & probabilized value of each successor (except for last slice in tree)
-					(*ppnode)->value += exp(- (*ppnode)->r() * (*(pdate-1)-*pdate)) * (*ppnode)->transitions[l].probability * (*ppnode)->transitions[l].destination->value;
+					((*ppnode)->value) += exp(-(*ppnode)->r()*(*(pdate-1)-*pdate))*(*ppnode)->transitions[l].probability*(*ppnode)->transitions[l].destination->value;
 				if (*pdate>swaption.swap.startdate)
-					(*ppnode)->value += swaption.swap.strikerate * (*pdate-*(pdate+1)) - (exp((*ppnode)->r()*(*pdate-*(pdate+1)))-1); // fixed - float 
-				if (*pdate = swaption.swap.startdate)
-					(*ppnode)->value = std::max<double>(0,(swaption.ispayeroption?-1:1)*(*ppnode)->value); // option exercice todo : max(0,+/- cashflow if receiver swaption)
-			}
-			++pdate; --i;
+					((*ppnode)->value) += swaption.swap.strikerate*(*pdate-*(pdate+1))-(exp((*ppnode)->r()*(*pdate-*(pdate+1)))-1); // fixed - float 
+				if (*pdate == swaption.swap.startdate)
+					((*ppnode)->value) = std::max<double>(0,(swaption.ispayeroption?-1:1)*(*ppnode)->value); // option exercice todo : max(0,+/- cashflow if receiver swaption)
+				}
+			++pdate; ++pslice;
 		}
-		return slice[0]->value; // NPV
+		for (auto ppnode = pslice->begin(); ppnode < pslice->end(); ++ppnode)
+				if (pdate != dates_.rbegin()) for (int l=0; l<3; ++l) // last computation to go back to time zero
+					((*ppnode)->value) += exp(- (*ppnode)->r() * (*(pdate-1)-0)) * (*ppnode)->transitions[l].probability * (*ppnode)->transitions[l].destination->value;
+		return (*pslice)[0]->value; // NPV
 	};
 
 	//todo : error returned if dates are not in right order, and if first date is <=0 (=0 included, it will fail)
 	Tree (RateCurve _ratecurve, HullWhite _hullwhite, std::vector<double> _dates) : PricerOptions(_ratecurve, _hullwhite), dates_(_dates) {
-		slices_.push_back(std::vector<Node*>(1,new Node(0,0,1,ratecurve.rates[0])));
+		slices_.push_back(std::vector<Node*>(1,new Node(0,0,1,ratecurve.rates[0]))); // todo : remplacer rates[0] vraiment bizarre
 		double prev_date = 0;
 		for (auto pdate = dates_.begin(); pdate < dates_.end(); ++pdate) {
 			slices_.push_back(std::vector<Node*>());
@@ -267,7 +272,8 @@ std::ostream& operator<< (std::ostream& flux, Tree& tree) {
 			flux <<  "n" << (*ppcurrentnode) << " [label=\""
 				<< "short rate : " << percentage((*ppcurrentnode)->r()) << "\\n "
 				<< "driftless rate : " << percentage((*ppcurrentnode)->x) << "\\n "
-				<< "contingent claim PV : " << percentage((*ppcurrentnode)->q)
+				<< "contingent claim PV : " << percentage((*ppcurrentnode)->q) << "\\n\\n "
+				<< "cashflow value : " << percentage((*ppcurrentnode)->value)
 				<< "\"];"<< std::endl;
 			for (int l=2; 0<=l; --l)
 				if ((*ppcurrentnode)->transitions[l].destination != NULL)
