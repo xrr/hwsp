@@ -6,14 +6,55 @@
 #include <math.h>
 #include <boost/math/special_functions/round.hpp>
 
-#include "Models.h"
-#include "Payoffs.h"
 #include "Tools.h"
-#include "Gauss.h"
 
-//#include <algorithm>
 
-//todo = check transition pointers in class Tree
+class Payoff {};
+
+// by convention : payer swap (receives float and pays fixed in exchange)
+class Swap : public Payoff {
+public :
+	double strikerate;
+	double startdate;
+	std::vector<double> paymentdates;
+	Swap(double _strikerate, double _startdate, std::vector<double> _paymentdates) : strikerate(_strikerate), startdate(_startdate), paymentdates(_paymentdates) {};
+};
+
+class Swaption : public Payoff {
+public :
+	Swap swap;
+	bool ispayeroption; // false : receiver swaption
+	Swaption(Swap _swap, bool _ispayeroption) :
+	swap(_swap), ispayeroption(_ispayeroption) {};
+};
+
+class RateCurve {
+public:
+	std::vector<double> times;
+	std::vector<double> rates;
+	double zerocoupon(double time) {
+		double prev_time = 0, tmp = ((time<=times[0])?rates[0]*time:0);
+		unsigned int k=0; while((k<times.size()) && (times[k]<time)) {
+			tmp+=rates[k]*(std::min<double>(time,((k==times.size()-1)?time:times[k+1]))-prev_time);
+			if (times.size()-1!=k) prev_time = times[k+1];
+			k++;
+		};
+		return exp(-tmp);
+	};
+	double rate(double time) {
+		if (time<=times[0]) return rates[0]; 
+		else {
+			unsigned int k=0; while((k<times.size()) && (times[k]<=time)) k++;
+			return rates[k-1];
+		}
+	};
+};
+
+class HullWhite {
+public:
+	double a, sigma;
+	HullWhite(double _a, double _sigma) : a(_a), sigma(_sigma) {};
+};
 
 class PricerGeneric {
 public :
@@ -54,9 +95,9 @@ public :
 class ClosedFormula : public PricerOptions {
 
 public :
-	
+
 	double B(double t, double T) {return 1/hullwhite.a*(1-exp(-hullwhite.a*(T-t)));};
-	
+
 	double A(double t, double T) {
 		return ratecurve.zerocoupon(T)/ratecurve.zerocoupon(t)*exp(
 			B(t,T)*ratecurve.rate(t)-hullwhite.sigma*hullwhite.sigma/(4*hullwhite.a)*(1-exp(-2*hullwhite.a)*B(t,T)*B(t,T)));
@@ -77,17 +118,17 @@ public :
 	};
 
 	virtual double Evaluate(Swaption swaption) {
-		
+
 		double r_star = dichotomicRootSearch<double, double, ClosedFormulaSwaptionFunctor>
-			(ClosedFormulaSwaptionFunctor(this,swaption), 1.0, 0.00001, 0.00, 1.00);
+			(ClosedFormulaSwaptionFunctor(this,swaption), 1.0, 0.00001, -1.00, 1.00);
 
 		int w = (swaption.ispayeroption?1:-1);
 		double PrixSwaption = 0;
 		double prev_paymentdate = swaption.swap.startdate;
 		for(std::vector<double>::size_type i=0; i<=swaption.swap.paymentdates.size()-1; ++i) {
 			double c = swaption.swap.strikerate*(swaption.swap.paymentdates[i]-prev_paymentdate);
-			if (swaption.swap.paymentdates.size()-1==i) c=c+1; // ?? // c=c+1 au lieu de ++c
-			prev_paymentdate = swaption.swap.paymentdates[i]; // ??
+			if (swaption.swap.paymentdates.size()-1==i) ++c;
+			prev_paymentdate = swaption.swap.paymentdates[i];
 			double X = A(swaption.swap.startdate, swaption.swap.paymentdates[i])*exp(-B(swaption.swap.startdate,swaption.swap.paymentdates[i])*r_star);
 			double sigma_p = hullwhite.sigma
 				* B(swaption.swap.startdate,swaption.swap.paymentdates[i])
@@ -95,8 +136,8 @@ public :
 			double h = sigma_p/2 + (1/sigma_p) * log(
 				ratecurve.zerocoupon(swaption.swap.paymentdates[i])
 				/(ratecurve.zerocoupon(swaption.swap.startdate)*X));
-			
-			AbramowitzStegunGauss gauss;
+
+			BoostGauss gauss;
 			double ZBO = w * X * ratecurve.zerocoupon(swaption.swap.startdate) * gauss.cdf(w*(sigma_p-h))
 				- w * ratecurve.zerocoupon(swaption.swap.paymentdates[i]) * gauss.cdf(-w*h);
 			PrixSwaption += c*ZBO;
@@ -122,7 +163,7 @@ public:
 class Node {
 public:
 	int relative_position;
-	double x, alpha, q; // no drift rate, displacement, arrow_debreu
+	double x, alpha, q; // driftless rate, displacement, arrow_debreu
 	double value; // todo : CHANGE
 	Transition transitions[3]; // down, middle, up
 	double r(void) { return x+alpha; }; // displaced rate
@@ -130,16 +171,20 @@ public:
 	Node(int _relative_position, double _x, double _q, double _alpha) : relative_position(_relative_position), x(_x), alpha(_alpha), q(_q), value(0) {};
 };
 
+
+
+// todo = tree destructor
+// todo = clean X= twice
 class Tree : public PricerOptions {
 
 private:
-	std::vector<std::vector<Node>> slices_;
+	std::vector<std::vector<Node*>> slices_;
 	std::vector<double> dates_;
 
 	void resetCashflowValues(void) {
-		for (auto pslice = slices_.begin(); pslice != slices_.end(); ++pslice)
-			for (auto pnode = pslice->begin(); pnode != pslice->end(); ++pnode)
-				pnode->value = 0;
+		for (auto pslice = slices_.begin(); pslice < slices_.end(); ++pslice)
+			for (auto ppnode = pslice->begin(); ppnode < pslice->end(); ++ppnode)
+				(*ppnode)->value = 0;
 	};
 
 public:
@@ -149,60 +194,63 @@ public:
 	virtual double Evaluate(Swaption swaption) {
 		//todo : check dates if dates of swap = last dates of tree
 		resetCashflowValues();
-		auto pdate = dates_.end(); auto pslice = slices_.end();
-		while (pdate >= dates_.begin()) {
-			for (auto pnode = pslice->begin(); pnode != pslice->end(); ++pnode) {
+		auto pdate = dates_.rbegin(); auto i = slices_.size(); auto slice = slices_[i-1];
+		while (pdate < dates_.rend()) {
+			slice = slices_[i-1]; // TODO IMPROVE !?
+			// DISCLAIMER /!\ *(pdate+1) = t-1 : pdate is a REVERSE iterator
+			for (auto ppnode = slice.begin(); ppnode != slice.end(); ++ppnode) {
+				if (pdate != dates_.rbegin()) for (int l=0; l<3; ++l) // discounted & probabilized value of each successor (except for last slice in tree)
+					(*ppnode)->value += exp(- (*ppnode)->r() * (*(pdate-1)-*pdate)) * (*ppnode)->transitions[l].probability * (*ppnode)->transitions[l].destination->value;
 				if (*pdate>swaption.swap.startdate)
-					pnode->value += swaption.swap.strikerate * (*pdate-*(pdate-1)) - (exp(pnode->r()*(*pdate-*(pdate-1)))-1); //fixed - float 
-				if (pdate != ratecurve.times.end()) for (int l=0; l<3; ++l) // discounted & probabilized value of each successor (except for last slice in tree)
-					pnode->value += exp(- pnode->r() * (*(pdate+1)-*pdate)) * pnode->transitions[l].probability * pnode->transitions[l].destination->value; 
+					(*ppnode)->value += swaption.swap.strikerate * (*pdate-*(pdate+1)) - (exp((*ppnode)->r()*(*pdate-*(pdate+1)))-1); // fixed - float 
 				if (*pdate = swaption.swap.startdate)
-					pnode->value = std::max<double>(0,(swaption.ispayeroption?-1:1)*pnode->value); // option exercice todo : max(0,+/- cashflow if receiver swaption)
+					(*ppnode)->value = std::max<double>(0,(swaption.ispayeroption?-1:1)*(*ppnode)->value); // option exercice todo : max(0,+/- cashflow if receiver swaption)
 			}
-			--pdate; --pslice;
+			++pdate; --i;
 		}
-		return (*pslice)[0].value; // NPV
+		return slice[0]->value; // NPV
 	};
 
-	Tree (RateCurve _ratecurve, HullWhite _hullwhite, std::vector<double> dates) : PricerOptions(_ratecurve, _hullwhite) {
-		slices_.push_back(std::vector<Node>(1,Node(0,0,1,ratecurve.rates[0])));
-		//std::vector<Node> slice0;
-		//slice0.push_back(Node(0,0,1,ratecurve.rates[0]));
-		//slices.push_back(slice0);
+	//todo : error returned if dates are not in right order, and if first date is <=0 (=0 included, it will fail)
+	Tree (RateCurve _ratecurve, HullWhite _hullwhite, std::vector<double> _dates) : PricerOptions(_ratecurve, _hullwhite), dates_(_dates) {
+		slices_.push_back(std::vector<Node*>(1,new Node(0,0,1,ratecurve.rates[0])));
 		double prev_date = 0;
-		for (auto pdate = dates.begin(); pdate != dates.end()-1; ++pdate) {
-			std::vector<Node> newslice;
+		for (auto pdate = dates_.begin(); pdate < dates_.end(); ++pdate) {
+			slices_.push_back(std::vector<Node*>());
+			auto pnewslice = slices_.rbegin(); // last slice
+			auto pcurrentslice = &(*(pnewslice+1)); // previous slice
 			double delta_t = *pdate - prev_date;
 			double e = exp(-hullwhite.a*delta_t);
 			double V = hullwhite.sigma * sqrt((1-e*e)/(2*hullwhite.a));
 			double delta_x = V * sqrt(3.0);
-			for (auto currentnode = slices_.back().begin(); currentnode != slices_.back().end(); ++currentnode) {
-				double M = currentnode->x*e;			
+			for (auto ppcurrentnode = pcurrentslice->begin(); ppcurrentnode < pcurrentslice->end(); ++ppcurrentnode) {
+				double M = (*ppcurrentnode)->x*e;			
 				int k = boost::math::iround(M/delta_x);
 				double R = (M-k*delta_x)/V; // eta/V
 				for (int l=-1; l<=+1; ++l) {
 					Transition newtransition((1+R*R)/6.0+((0==l)?(1-R*R):l*R/sqrt(3.0))/2.0);
-					auto existingnode = newslice.begin();
-					while (existingnode != newslice.end() && newtransition.destination == NULL) {
-						if (existingnode->relative_position == k+l) newtransition.destination = &(*existingnode);
-						++existingnode;
+					auto ppexistingnode = pnewslice->begin();
+					while (ppexistingnode < pnewslice->end() && newtransition.destination == NULL) {
+						if ((*ppexistingnode)->relative_position == k+l)
+							newtransition.destination = *ppexistingnode;
+						++ppexistingnode;
 					}
 					if (newtransition.destination == NULL) {
-						newslice.push_back(Node(k+l, (k+l)*delta_x));
-						newtransition.destination=&newslice.back();
+						pnewslice->push_back(new Node(k+l, (k+l)*delta_x));
+						newtransition.destination = *(pnewslice->rbegin());
 					}
-					currentnode->transitions[1+l]=newtransition;
-					newtransition.destination->q+=currentnode->q*newtransition.probability*exp(-currentnode->r()*delta_t);
+					(*ppcurrentnode)->transitions[1+l]=newtransition;
+					newtransition.destination->q+=(*ppcurrentnode)->q*newtransition.probability*exp(-(*ppcurrentnode)->r()*delta_t);
 				}
 			}
-			slices_.push_back(newslice);
 			double alpha = 0;
-			for (auto currentnode = slices_.back().begin(); currentnode != slices_.back().end(); ++currentnode)
-				alpha+=currentnode->q*exp(-currentnode->x*delta_t);
-			alpha = log(alpha/(ratecurve.zerocoupon(*(pdate+1))))/delta_t;
-			std::cout << percentage(alpha) << "\n";
-			for (auto currentnode = slices_.back().begin(); currentnode != slices_.back().end(); ++currentnode)
-				currentnode->alpha = alpha;
+			for (auto ppcurrentnode = pnewslice->begin(); ppcurrentnode != pnewslice->end(); ++ppcurrentnode)
+				alpha+=(*ppcurrentnode)->q*exp(-(*ppcurrentnode)->x*delta_t);
+			double t = (pdate+1<dates_.end())?*(pdate+1):*pdate+delta_t;
+			alpha = log(alpha/(ratecurve.zerocoupon(t)))/delta_t;
+			std::cout << t << " : " << alpha;
+			for (auto ppcurrentnode = pnewslice->begin(); ppcurrentnode != pnewslice->end(); ++ppcurrentnode)
+				(*ppcurrentnode)->alpha = alpha;
 			prev_date = *pdate;
 		}
 	};
@@ -210,15 +258,45 @@ public:
 };
 
 std::ostream& operator<< (std::ostream& flux, Tree& tree) {
-	for (auto currentslice = tree.slices_.begin(); currentslice != tree.slices_.end(); ++currentslice) {
-		for (auto currentnode = currentslice->begin(); currentnode != currentslice->end(); ++currentnode) {
-			flux << percentage(currentnode->r(),5) << "; ";
-			/*flux << percentage(currentnode->transitions[2].probability) << " "
-			<< percentage(currentnode->transitions[1].probability) << " "
-			<< percentage(currentnode->transitions[0].probability) << " ";
-			flux << "\n";*/
+	flux << "digraph Tree {" << std::endl
+		<< "graph [rankdir=\"LR\",splines=false,label=\"Trinomial Tree\"];" << std::endl
+		<< "node [shape=record,color=blue];" << std::endl
+		<< "edge [style=dashed,color=red];" << std::endl
+		<< std::endl;
+	for (auto pcurrentslice = tree.slices_.begin(); pcurrentslice < tree.slices_.end(); ++pcurrentslice) {
+		for (auto ppcurrentnode = pcurrentslice->rbegin(); ppcurrentnode < pcurrentslice->rend(); ++ppcurrentnode) {
+			flux <<  "n" << (*ppcurrentnode) << " [label=\""
+				<< "drift-less rate : " << percentage((*ppcurrentnode)->x) << "\\n "
+				<< "short rate : " << percentage((*ppcurrentnode)->r()) << "\\n "
+				<< "claim PV : " << percentage((*ppcurrentnode)->q)
+				<< "\"];"<< std::endl;
+			for (int l=2; 0<=l; --l)
+				if ((*ppcurrentnode)->transitions[l].destination != NULL)
+				flux << "n" << (*ppcurrentnode) << " -> n" << (*ppcurrentnode)->transitions[l].destination
+				<< " [label=\"p" << (0<l?(1<l?"u":"m"):"d") << " = " << percentage((*ppcurrentnode)->transitions[l].probability) << "\"];"<< std::endl;
 		}
-		flux << "\n";
+	flux << std::endl;
 	}
+	flux << "}" << std::endl;
 	return flux;
-}
+};
+
+
+//ordering=out;
+//	nodesep=0.6;
+//	node [shape=box];
+//	node [fontsize = "16", shape = "ellipse", color=blue];
+//	edge [arrowsize=0.3];
+//	graph [rankdir = "LR"];
+//	
+//	node_1 -> node_2; [ label = "g" ];
+//	node_1 [label="ID: 1\ntype: 48\nnbr out: 0\nnbr chi: 11"];
+//	node_2 [label="ID: 2\ntype: 8\nnbr out: 0\nnbr chi: 0"];
+//	node_1 -> node_3 [color = red];
+//	}
+//
+//subgraph b {
+//
+////edge [];
+//"node0" [label = "<f0> blabla| <f1>", shape = "record"];
+//"node0":f0 -> "node1":f0 [id = 0];

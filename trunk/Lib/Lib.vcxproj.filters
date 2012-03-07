@@ -15,19 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Gauss.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Tools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Models.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Pricers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Payoffs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

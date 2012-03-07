@@ -11,9 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Payoffs.h" />
-    <ClInclude Include="Gauss.h" />
-    <ClInclude Include="Models.h" />
     <ClInclude Include="Pricers.h" />
     <ClInclude Include="Tools.h" />
   </ItemGroup>
