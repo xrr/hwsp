@@ -4,8 +4,8 @@
 
 #include <math.h>
 
-#include "Pricers.h"
-#include "Tools.h"
+#include "Lib.h"
+
 
 
 int main () {
@@ -27,20 +27,29 @@ int main () {
 	ClosedFormula pricer_option1(courbe, hullwhite);
 	Tree pricer_option2(courbe,hullwhite, tree_dates);
 
+	for (int i = 0; i < 5; ++i) {
 
-	Swap swap(0.05,1,courbe.times);
-	Swaption swaption1(swap, true);
-	Swaption swaption2(swap, false);
+		double strike = 0.03+0.01*i;
 
+		Swap swap(strike,1,courbe.times);
+		Swaption swaption1(swap, true);
+		Swaption swaption2(swap, false);
 
-	std::cout << "=== Formule fermee ==="  << "\n";
-	std::cout << "Payeur \t\t: " << percentage(pricer_swap.Evaluate(swap)) << "\n";
-	std::cout << "Payeuse \t: " << percentage(pricer_option1.Evaluate(swaption1)) << "\n";
-	std::cout << "Receveuse \t: " << percentage(pricer_option1.Evaluate(swaption2)) << "\n";
-	std::cout << "=== Arbre trinomial ==="  << "\n";
-	std::cout << "Payeuse \t: " << percentage(pricer_option2.Evaluate(swaption1)) << "\n";
-	std::cout << "Receveuse \t: " << percentage(pricer_option2.Evaluate(swaption2)) << "\n";
-	
+		std::cout
+			<< std::endl << "=== Payer Swap ===" 
+			<< std::endl << "Strike \t: " << percentage(strike)
+			<< std::endl << "Price  \t: " << percentage(pricer_swap.Evaluate(swap))
+			<< std::endl
+			<< std::endl << "=== Payer Option === "
+			<< std::endl << "Formula\t: " << percentage(pricer_option1.Evaluate(swaption1))
+			<< std::endl << "Tree   \t: " << percentage(pricer_option2.Evaluate(swaption1))
+			<< std::endl
+			<< std::endl << "=== Rec. Option === "
+			<< std::endl << "Formula\t: " << percentage(pricer_option1.Evaluate(swaption2))
+			<< std::endl << "Tree   \t: " << percentage(pricer_option2.Evaluate(swaption2))
+			<< std::endl << std::endl << std::endl << std::endl << std::endl;
+	}
+
 	std::ofstream(std::ofstream("tree.gv", std::ios::trunc)) << pricer_option2;
 
 	std::getchar();

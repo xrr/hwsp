@@ -15,10 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Tools.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Pricers.h">
+    <ClInclude Include="Lib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
