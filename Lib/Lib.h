@@ -11,8 +11,6 @@
 #include <boost/math/special_functions/erf.hpp>
 #include <boost/math/distributions/normal.hpp>
 
-
-
 #define M_SQRT1_2 7.0710678118654752440E-1 // 2^(-1/2)
 
 std::string percentage (double value, int precision = 3) {
