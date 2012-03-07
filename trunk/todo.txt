@@ -1,7 +1,13 @@
-RateCurve -> improve
-zerocoupon *= exp(-blabla) : ou pas, mais justifier pour des raisons de performance
 
 replace the functor by a member function pointer in the dichotomicrootfinder ?
 (or a lambda !? http://www.cprogramming.com/c++11/c++11-lambda-closures.html)
 
-http://lombok.demon.co.uk/financialTap/interestrates/hwtrinomialtree
+Tree(Swaption) : should check if dates are ok
+(in the right order, and also >0 because zero will fail, could be changed)
+
+DichotomicRootSearch: stop at some point if input bounds are wrong or function is non monotonic ?
+
+f() et Evaluate(Swaption) ont beaucoup de code en commun
+
+RateCurve -> improve
+zerocoupon *= exp(-blabla) : ou pas, mais justifier pour des raisons de performance

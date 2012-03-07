@@ -11,8 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Pricers.h" />
-    <ClInclude Include="Tools.h" />
+    <ClInclude Include="Lib.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
